@@ -21,5 +21,6 @@ setup(
     install_requires=[
         'PyQt5>=5.14',
         'llama-index',
+        'openai'
     ]
 )
