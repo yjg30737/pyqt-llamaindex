@@ -3,6 +3,7 @@ Example of use llama-index in Python desktop application
 
 ## Requirements
 * PyQt5 >= 5.14
+* openai
 * llama-index
 
 ## How to Run
