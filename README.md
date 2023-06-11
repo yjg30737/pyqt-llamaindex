@@ -1,6 +1,12 @@
 # pyqt-llamaindex
 Example of use llama-index in Python desktop application
 
+With combination of llama-index and openai, you can pretty much make your personal chatbot, by your input.
+
+Currently this package is only supporting txt files(i don't know about other file type such as .doc works) in the directory. If you want to feed the chatbot to respond what you want to get answer, put txt file inside the ".example" directory.
+
+By default, .example folder contains yjg30737.txt and pyqt-openai.txt. It was used for testing so feel free to remove it if you want.
+
 ## Requirements
 * PyQt5 >= 5.14
 * openai
