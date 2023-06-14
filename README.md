@@ -25,3 +25,6 @@ By default, example folder contains yjg30737.txt and pyqt-openai.txt. It was use
 ## Preview
 
 ![image](https://github.com/yjg30737/pyqt-llamaindex/assets/55078043/67e17c9b-9a49-4f3b-8c3d-05d7c85941fb)
+
+## See Also
+* <a href="https://github.com/yjg30737/pyqt-openai">pyqt-openai</a>
