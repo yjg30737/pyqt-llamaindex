@@ -32,7 +32,10 @@ QApplication.setFont(QFont('Arial', 12))
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        # declare widgets in advance to prevent AttributeError
         self.__apiLineEdit = QLineEdit()
+        self.__apiCheckPreviewLbl = QLabel()
+
         self.__initVal()
         self.__initUi()
 
@@ -120,6 +123,8 @@ class MainWindow(QMainWindow):
         mainWidget.setLayout(lay)
 
         self.setCentralWidget(mainWidget)
+
+        self.resize(800, 600)
 
     def __setApiKey(self, api_key):
         # for script
