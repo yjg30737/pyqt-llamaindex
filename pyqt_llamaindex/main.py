@@ -34,12 +34,14 @@ class MainWindow(QMainWindow):
         super().__init__()
         # declare widgets in advance to prevent AttributeError
         self.__apiLineEdit = QLineEdit()
+        self.__prompt = Prompt()
         self.__apiCheckPreviewLbl = QLabel()
 
         self.__initVal()
         self.__initUi()
 
     def __initVal(self):
+        self.__selected_dirname = ''
         self.__settings_struct = QSettings('openai_ini.ini', QSettings.IniFormat)
         api_key = self.__settings_struct.value('API_KEY', '')
 
@@ -49,7 +51,6 @@ class MainWindow(QMainWindow):
         # check if loaded API_KEY from ini file is not empty
         if openai.api_key:
             self.__setApiKey(api_key)
-            self.__gptLLamaIndexClass = GPTLLamaIndexClass()
         # if it is empty
         else:
             self.__setAIEnabled(False)
@@ -84,7 +85,6 @@ class MainWindow(QMainWindow):
         self.__listWidget.clicked.connect(self.__setTextInBrowser)
         self.__listWidget.onDirectorySelected.connect(self.__onDirectorySelected)
 
-        self.__prompt = Prompt()
         self.__lineEdit = self.__prompt.getTextEdit()
         self.__lineEdit.returnPressed.connect(self.__sendChat)
         self.__browser = ChatBrowser()
@@ -133,6 +133,7 @@ class MainWindow(QMainWindow):
         os.environ['OPENAI_API_KEY'] = api_key
         # for showing to the user
         self.__apiLineEdit.setText(api_key)
+        self.__gptLLamaIndexClass = GPTLLamaIndexClass()
 
     def __loadApiKeyInIni(self):
         # this api key should be yours
@@ -167,10 +168,11 @@ class MainWindow(QMainWindow):
             self.__apiCheckPreviewLbl.show()
 
     def __onDirectorySelected(self):
-        selected_dirname = self.__listWidget.getDir()
-        self.__gptLLamaIndexClass.setDirectory(selected_dirname)
+        self.__selected_dirname = self.__listWidget.getDir()
 
     def __sendChat(self):
+        self.__gptLLamaIndexClass.setDirectory(self.__selected_dirname)
+
         query_text = self.__lineEdit.toPlainText()
         self.__browser.showText(query_text, True)
 
