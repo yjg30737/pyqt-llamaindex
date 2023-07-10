@@ -3,10 +3,18 @@ import inspect
 import openai
 
 from PyQt5.QtCore import QThread, pyqtSignal
+from llama_index import Response
+from llama_index.response.schema import StreamingResponse
 
 
 class OpenAIThread(QThread):
-    replyGenerated = pyqtSignal(str, bool)
+    """
+    == replyGenerated Signal ==
+    First: response
+    Second: user or AI
+    Third: streaming or not streaming
+    """
+    replyGenerated = pyqtSignal(str, bool, bool)
     streamFinished = pyqtSignal()
 
     def __init__(self, llama_idx_instance, query_text, *args, **kwargs):
@@ -16,9 +24,14 @@ class OpenAIThread(QThread):
 
     def run(self):
         try:
-            streaming_response = self.__llama_idx_instance.getResponse(self.__query_text)
-            for response_text in streaming_response.response_gen:
-                self.replyGenerated.emit(response_text, False)
+            resp = self.__llama_idx_instance.getResponse(self.__query_text)
+            f = isinstance(resp, StreamingResponse)
+            if f:
+                for response_text in resp.response_gen:
+                    self.replyGenerated.emit(response_text, False, f)
+                self.streamFinished.emit()
+            else:
+                self.replyGenerated.emit(resp.response, False, f)
         except openai.error.InvalidRequestError as e:
             print(e)
             self.replyGenerated.emit('<p style="color:red">Your request was rejected as a result of our safety system.<br/>'
