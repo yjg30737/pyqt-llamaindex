@@ -1,10 +1,4 @@
-import inspect
-
-import openai
-
 from PyQt5.QtCore import QThread, pyqtSignal
-from llama_index import Response
-from llama_index.response.schema import StreamingResponse
 
 
 class OpenAIThread(QThread):
@@ -24,17 +18,7 @@ class OpenAIThread(QThread):
 
     def run(self):
         try:
-            resp = self.__llama_idx_instance.getResponse(self.__query_text)
-            f = isinstance(resp, StreamingResponse)
-            if f:
-                for response_text in resp.response_gen:
-                    self.replyGenerated.emit(response_text, False, f)
-                self.streamFinished.emit()
-            else:
-                self.replyGenerated.emit(resp.response, False, f)
-        except openai.error.InvalidRequestError as e:
-            print(e)
-            self.replyGenerated.emit('<p style="color:red">Your request was rejected as a result of our safety system.<br/>'
-                                     'Your prompt may contain text that is not allowed by our safety system.</p>', False)
-        except openai.error.RateLimitError as e:
-            self.replyGenerated.emit(f'<p style="color:red">{e}<br/>Check the usage: https://platform.openai.com/account/usage<br/>Update to paid account: https://platform.openai.com/account/billing/overview', False)
+            response = self.__llama_idx_instance.getResponse(self.__query_text)
+            self.replyGenerated.emit(response, False, False)
+        except Exception as e:
+            self.replyGenerated.emit(f'<p style="color:red">{e}</p>', False, False)

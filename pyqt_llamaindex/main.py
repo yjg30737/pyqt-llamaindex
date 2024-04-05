@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
 
     def __initVal(self):
         self.__selected_dirname = ''
-        self.__settings_struct = QSettings('openai_ini.ini', QSettings.IniFormat)
+        self.__settings_struct = QSettings('settings.ini', QSettings.IniFormat)
         api_key = self.__settings_struct.value('API_KEY', '')
 
         # load ini file
