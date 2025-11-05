@@ -63,7 +63,9 @@ class FileListWidget(QWidget):
 
             self.__listWidget.setCurrentRow(0)
             # activate event as clicking first item (because this selects the first item anyway)
-            self.clicked.emit(os.path.join(self.__curDirName, self.__listWidget.currentItem().text()))
+            item = self.__listWidget.currentItem()
+            if item:
+                self.clicked.emit(os.path.join(self.__curDirName, item.text()))
             self.onDirectorySelected.emit()
 
     def getDir(self):

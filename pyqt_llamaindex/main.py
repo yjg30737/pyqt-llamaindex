@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QLabel, QLin
 from pyqt_llamaindex.chatWidget import ChatBrowser, Prompt
 from pyqt_llamaindex.listWidget import FileListWidget
 from pyqt_llamaindex.openAiThread import OpenAIThread
-from pyqt_llamaindex.scripts import GPTLLamaIndexClass
+from pyqt_llamaindex.scripts import LlamaIndexWrapper
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)  # HighDPI support
@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
         os.environ['OPENAI_API_KEY'] = api_key
         # for showing to the user
         self.__apiLineEdit.setText(api_key)
-        self.__gptLLamaIndexClass = GPTLLamaIndexClass()
+        self.__llamaIndexWrapper = LlamaIndexWrapper()
 
     def __loadApiKeyInIni(self):
         # this api key should be yours
@@ -169,16 +169,16 @@ class MainWindow(QMainWindow):
 
     def __onDirectorySelected(self):
         self.__selected_dirname = self.__listWidget.getDir()
+        self.__llamaIndexWrapper.set_directory(self.__selected_dirname)
+        self.__llamaIndexWrapper.set_query_engine()
 
     def __sendChat(self):
-        self.__gptLLamaIndexClass.setDirectory(self.__selected_dirname)
-
         query_text = self.__lineEdit.toPlainText()
         self.__browser.showText(query_text, True)
 
         self.__lineEdit.setEnabled(False)
 
-        self.__t = OpenAIThread(self.__gptLLamaIndexClass, query_text)
+        self.__t = OpenAIThread(self.__llamaIndexWrapper, query_text)
         self.__t.replyGenerated.connect(self.__browser.showText)
         self.__prompt.getTextEdit().clear()
         self.__t.start()

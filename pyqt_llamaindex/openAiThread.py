@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
+from llama_index.core.base.response.schema import StreamingResponse
 
 
 class OpenAIThread(QThread):
@@ -11,14 +12,19 @@ class OpenAIThread(QThread):
     replyGenerated = pyqtSignal(str, bool, bool)
     streamFinished = pyqtSignal()
 
-    def __init__(self, llama_idx_instance, query_text, *args, **kwargs):
+    def __init__(self, wrapper, query_text, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__llama_idx_instance = llama_idx_instance
+        self.__wrapper = wrapper
         self.__query_text = query_text
 
     def run(self):
         try:
-            response = self.__llama_idx_instance.getResponse(self.__query_text)
-            self.replyGenerated.emit(response, False, False)
+            resp = self.__wrapper.get_response(self.__query_text)
+            f = isinstance(resp, StreamingResponse)
+            if f:
+                for chunk in resp.response_gen:
+                    self.replyGenerated.emit(chunk, True, True)
+            else:
+                self.replyGenerated.emit(resp.response, False, False)
         except Exception as e:
             self.replyGenerated.emit(f'<p style="color:red">{e}</p>', False, False)
