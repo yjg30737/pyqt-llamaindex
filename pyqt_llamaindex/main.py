@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 
 # Get the absolute path of the current script file
 script_path = os.path.abspath(__file__)
@@ -11,22 +12,15 @@ sys.path.insert(0, os.getcwd())  # Add the current directory as well
 
 import openai
 import requests
-from PyQt5.QtCore import QCoreApplication, Qt, QSettings
-from PyQt5.QtGui import QGuiApplication, QFont, QColor
-from PyQt5.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, \
+from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, \
     QVBoxLayout, QSplitter, QSizePolicy, QFrame, QTextBrowser
 
 from pyqt_llamaindex.chatWidget import ChatBrowser, Prompt
 from pyqt_llamaindex.listWidget import FileListWidget
 from pyqt_llamaindex.openAiThread import OpenAIThread
 from pyqt_llamaindex.scripts import LlamaIndexWrapper
-
-QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)  # HighDPI support
-# qt version should be above 5.14
-QGuiApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-
-QApplication.setFont(QFont('Arial', 12))
 
 
 class MainWindow(QMainWindow):
@@ -42,7 +36,7 @@ class MainWindow(QMainWindow):
 
     def __initVal(self):
         self.__selected_dirname = ''
-        self.__settings_struct = QSettings('settings.ini', QSettings.IniFormat)
+        self.__settings_struct = QSettings('settings.ini', QSettings.Format.IniFormat)
         api_key = self.__settings_struct.value('API_KEY', '')
 
         # load ini file
@@ -66,7 +60,7 @@ class MainWindow(QMainWindow):
 
         self.__apiLineEdit.setPlaceholderText('Write your API Key...')
         self.__apiLineEdit.returnPressed.connect(self.__setApi)
-        self.__apiLineEdit.setEchoMode(QLineEdit.Password)
+        self.__apiLineEdit.setEchoMode(QLineEdit.EchoMode.Password)
 
         apiBtn = QPushButton('Use')
         apiBtn.clicked.connect(self.__setApi)
@@ -103,21 +97,21 @@ class MainWindow(QMainWindow):
         self.__txtBrowser.setMaximumHeight(150)
 
         sep = QFrame()
-        sep.setFrameShape(QFrame.HLine)
-        sep.setFrameShadow(QFrame.Sunken)
+        sep.setFrameShape(QFrame.Shape.HLine)
+        sep.setFrameShadow(QFrame.Shadow.Sunken)
 
         splitter = QSplitter()
         splitter.addWidget(self.__listWidget)
         splitter.addWidget(rightWidget)
         splitter.setChildrenCollapsible(False)
-        splitter.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        splitter.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
         lay = QVBoxLayout()
         lay.addWidget(apiWidget)
         lay.addWidget(sep)
         lay.addWidget(splitter)
         lay.addWidget(self.__txtBrowser)
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         mainWidget = QWidget()
         mainWidget.setLayout(lay)

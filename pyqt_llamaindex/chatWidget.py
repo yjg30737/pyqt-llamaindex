@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QTextEdit
+from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QTextEdit
 
 
 class ChatBrowser(QScrollArea):
@@ -9,7 +9,7 @@ class ChatBrowser(QScrollArea):
 
     def __initUi(self):
         lay = QVBoxLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignmentFlag.AlignTop)
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
         widget = QWidget()
@@ -20,17 +20,17 @@ class ChatBrowser(QScrollArea):
     def showText(self, text, user_f):
         chatLbl = QLabel(text)
         chatLbl.setWordWrap(True)
-        chatLbl.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        chatLbl.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         if user_f:
             chatLbl.setStyleSheet('QLabel { padding: 1em }')
-            chatLbl.setAlignment(Qt.AlignRight)
+            chatLbl.setAlignment(Qt.AlignmentFlag.AlignRight)
         else:
             lbl = self.widget().layout().itemAt(self.widget().layout().count() - 1).widget()
-            if isinstance(lbl, QLabel) and lbl.alignment() == Qt.AlignLeft:
+            if isinstance(lbl, QLabel) and lbl.alignment() == Qt.AlignmentFlag.AlignLeft:
                 lbl.setText(lbl.text() + text)
                 return
             chatLbl.setStyleSheet('QLabel { background-color: #DDD; padding: 1em }')
-            chatLbl.setAlignment(Qt.AlignLeft)
+            chatLbl.setAlignment(Qt.AlignmentFlag.AlignLeft)
             chatLbl.setOpenExternalLinks(True)
         self.widget().layout().addWidget(chatLbl)
 
@@ -62,8 +62,8 @@ class TextEditPrompt(QTextEdit):
         self.setStyleSheet('QTextEdit { border: 1px solid #AAA; } ')
 
     def keyPressEvent(self, e):
-        if e.key() == Qt.Key_Return or e.key() == Qt.Key_Enter:
-            if e.modifiers() == Qt.ShiftModifier:
+        if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key.Key_Enter:
+            if e.modifiers() == Qt.KeyboardModifier.ShiftModifier:
                 return super().keyPressEvent(e)
             else:
                 self.returnPressed.emit()
@@ -92,4 +92,3 @@ class Prompt(QWidget):
 
     def getTextEdit(self):
         return self.__textEdit
-

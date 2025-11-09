@@ -1,8 +1,7 @@
 import os
 
-from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QFontMetrics
-from PyQt5.QtWidgets import QListWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QSpacerItem, QPushButton, \
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QListWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QSpacerItem, QPushButton, \
     QSizePolicy, QFileDialog, QFrame
 
 
@@ -28,7 +27,7 @@ class FileListWidget(QWidget):
 
         lay = QHBoxLayout()
         lay.addWidget(lbl)
-        lay.addSpacerItem(QSpacerItem(10, 10, QSizePolicy.MinimumExpanding))
+        lay.addSpacerItem(QSpacerItem(10, 10, QSizePolicy.Policy.MinimumExpanding))
         lay.addWidget(setDirBtn)
         lay.setContentsMargins(0, 0, 0, 0)
 
@@ -39,8 +38,8 @@ class FileListWidget(QWidget):
         self.__listWidget.itemClicked.connect(self.__sendDir)
 
         sep = QFrame()
-        sep.setFrameShape(QFrame.HLine)
-        sep.setFrameShadow(QFrame.Sunken)
+        sep.setFrameShape(QFrame.Shape.HLine)
+        sep.setFrameShadow(QFrame.Shadow.Sunken)
 
         lay = QVBoxLayout()
         lay.addWidget(topWidget)

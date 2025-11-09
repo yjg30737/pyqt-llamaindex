@@ -16,16 +16,19 @@ class LlamaIndexWrapper:
             directory: str,
             ext: list[str] | None = None,
     ) -> None:
-        if not ext:
-            default_ext = [".txt"]
-            ext = default_ext if default_ext else []
-        assert ext, "llama_index_supported_formats is not set"
-        self._directory = directory
-        documents = SimpleDirectoryReader(
-            input_dir=self._directory,
-            required_exts=ext,
-        ).load_data()
-        self._index = VectorStoreIndex.from_documents(documents)
+        try:
+            if not ext:
+                default_ext = [".txt"]
+                ext = default_ext if default_ext else []
+            assert ext, "llama_index_supported_formats is not set"
+            self._directory = directory
+            documents = SimpleDirectoryReader(
+                input_dir=self._directory,
+                required_exts=ext,
+            ).load_data()
+            self._index = VectorStoreIndex.from_documents(documents)
+        except Exception as e:
+            print(e)
 
     def is_query_engine_set(self) -> bool:
         return self._query_engine is not None
