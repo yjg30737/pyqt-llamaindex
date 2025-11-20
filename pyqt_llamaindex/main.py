@@ -15,7 +15,7 @@ import requests
 from PyQt6.QtCore import Qt, QSettings
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, \
-    QVBoxLayout, QSplitter, QSizePolicy, QFrame, QTextBrowser
+    QVBoxLayout, QSplitter, QSizePolicy, QFrame, QTextBrowser, QMessageBox
 
 from pyqt_llamaindex.chatWidget import ChatBrowser, Prompt
 from pyqt_llamaindex.listWidget import FileListWidget
@@ -38,6 +38,7 @@ class MainWindow(QMainWindow):
         self.__selected_dirname = ''
         self.__settings_struct = QSettings('settings.ini', QSettings.Format.IniFormat)
         api_key = self.__settings_struct.value('API_KEY', '')
+        self.__llamaIndexWrapper = None
 
         # load ini file
         self.__loadApiKeyInIni()
@@ -127,7 +128,8 @@ class MainWindow(QMainWindow):
         os.environ['OPENAI_API_KEY'] = api_key
         # for showing to the user
         self.__apiLineEdit.setText(api_key)
-        self.__llamaIndexWrapper = LlamaIndexWrapper()
+        if api_key.strip() != '':
+            self.__llamaIndexWrapper = LlamaIndexWrapper()
 
     def __loadApiKeyInIni(self):
         # this api key should be yours
@@ -162,9 +164,15 @@ class MainWindow(QMainWindow):
             self.__apiCheckPreviewLbl.show()
 
     def __onDirectorySelected(self):
-        self.__selected_dirname = self.__listWidget.getDir()
-        self.__llamaIndexWrapper.set_directory(self.__selected_dirname)
-        self.__llamaIndexWrapper.set_query_engine()
+        try:
+            self.__selected_dirname = self.__listWidget.getDir()
+            if self.__llamaIndexWrapper:
+                self.__llamaIndexWrapper.set_directory(self.__selected_dirname)
+                self.__llamaIndexWrapper.set_query_engine()
+            else:
+                QMessageBox.warning(self, "Warning", "LlamaIndexWrapper is not initialized. Please set a valid API key.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred while setting the directory:\n{str(e)}")
 
     def __sendChat(self):
         query_text = self.__lineEdit.toPlainText()
