@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/setup.py">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/setup.py" />
+              <option name="originalContent" value="from setuptools import setup, find_packages&#10;import codecs&#10;import os&#10;&#10;here = os.path.abspath(os.path.dirname(__file__))&#10;&#10;with codecs.open(os.path.join(here, &quot;README.md&quot;), encoding=&quot;utf-8&quot;) as fh:&#10;    long_description = &quot;\n&quot; + fh.read()&#10;&#10;setup(&#10;    name='pyqt-llamaindex',&#10;    version='0.0.11',&#10;    author='Jung Gyu Yoon',&#10;    author_email='yjg30737@gmail.com',&#10;    license='MIT',&#10;    packages=find_packages(),&#10;    description='Example of using LLamaIndex in Python desktop app',&#10;    url='https://github.com/yjg30737/pyqt-llamaindex.git',&#10;    long_description_content_type='text/markdown',&#10;    long_description=long_description,&#10;    install_requires=[&#10;        'PyQt6',&#10;        'llama-index',&#10;        'openai'&#10;    ]&#10;)" />
+              <option name="updatedContent" value="# NOTE: package metadata has been moved to pyproject.toml (PEP 621).&#10;# This file is intentionally left minimal to avoid accidental duplication.&#10;# Use the pyproject.toml-based build backend with pip or build tools:&#10;#   python -m pip install .&#10;#   python -m build&#10;&#10;from setuptools import setup  # kept for compatibility with tools that import setup.py&#10;&#10;# No-op placeholder. See pyproject.toml for package metadata and dependencies.&#10;__all__ = []" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
