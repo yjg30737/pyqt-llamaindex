@@ -162,3 +162,5 @@ cython_debug/
 # personal
 openai_ini.ini
 article_by_someone.py
+
+.idea/copilotDiffState.xml
